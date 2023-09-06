@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
-import { CommunicationService } from '../communication.service';
+import { CommunicationService } from '../communication.service';//Sin usar aún
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-registro',
@@ -15,11 +18,11 @@ export class RegistroPage implements OnInit {
   correoElectronico: string = '';
   registroExitoso: boolean = false;
 
-
   constructor(
     private router: Router,
+    private authService: AuthService,
     private userService: UserService,
-    private communicationService: CommunicationService
+    public toastController: ToastController,
   ) {}
 
   ngOnInit() {}
@@ -29,40 +32,26 @@ export class RegistroPage implements OnInit {
       return;
     }
 
-    console.log('PASO -1 OK');
-
     const usuarioExistente = this.userService.getUserByUsername(this.usuario);
     if (usuarioExistente) {
       return;
     }
 
-    console.log('PASO 0 OK');
-
     const userData = { Usuario: this.usuario };
     this.userService.saveUserData(userData);
 
-    console.log('PASO 1 OK');
-
-    // Generar un ID autoincrementable para el nuevo usuario
     const nuevoUsuario = {
-      id: this.userService.generateUniqueId(), // Incrementa el contador y usa el valor como ID
+      id: this.userService.generateUniqueId(),
       username: this.usuario,
       password: this.contrasena,
       email: this.correoElectronico,
-      role: 'user', // Define el rol del usuario si es necesario
+      role: 'user',
     };
-    console.log('PASO 2 OK');
-    console.log(nuevoUsuario)
 
-    // Agregar el usuario a través del servicio de usuarios
     this.userService.agregarUsuario(nuevoUsuario);
-    console.log('PASO 3 OK');
-
-    // También puedes enviar los datos al componente de inicio de sesión usando el servicio de comunicación
-    this.communicationService.sendUserData(nuevoUsuario);
-    console.log('PASO 4 OK');
-
-    this.registroExitoso = true;
-    this.router.navigate(['/home']);
+    if (this.authService.loginUser(this.usuario, this.contrasena)) {
+      this.registroExitoso = true;
+      this.router.navigate(['/home']);
+    }
   }
 }

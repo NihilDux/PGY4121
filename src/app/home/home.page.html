@@ -8,11 +8,11 @@
 <br>
 <ion-content class="ion-text-center">
   <div class="welcome-message" *ngIf="loggedInUser && loggedInUser.Usuario">
-    <h2>Usuario: {{ loggedInUser.Usuario }}</h2>
+    <h2>Usuario: {{ loggedInUser.Usuario }}</h2> <!-- Sigue el problema de que muestra al último usuario en registrarce -->
   </div>
   <br>
   <ion-card>
-    <!-- Otras secciones de la página de inicio -->
+    <!-- Poner las demás secciones en el home -->
   </ion-card>
 </ion-content>
 

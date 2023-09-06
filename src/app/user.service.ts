@@ -28,8 +28,12 @@ export class UserService {
     this.storage.set('userData', userData);
   }
 
-  getUserData() {
-    return this.storage.get('userData');
+  async getUserData() {
+    if (this.isLoggedIn()) {
+      const userData = await this.storage.get('userData');
+      return userData;
+    }
+    return null;
   }
 
   isLoggedIn() {
@@ -54,10 +58,7 @@ export class UserService {
   }
 
   agregarUsuario(usuario: User) {
-    // Generar un ID autoincrementable para el nuevo usuario
     const newUserId = this.generateUniqueId();
-
-    // Asignar el nuevo ID al usuario antes de agregarlo
     usuario.id = newUserId;
 
     this.users.push(usuario);
@@ -72,7 +73,6 @@ export class UserService {
     return this.storage.get('users');
   }
 
-  // Método para generar un ID autoincrementable
   generateUniqueId(): number {
     const lastUserId = this.users.length > 0 ? this.users[this.users.length - 1].id : 0;
     return lastUserId + 1;

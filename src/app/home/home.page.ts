@@ -8,13 +8,13 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  loggedInUser: any = {}; // Inicializa loggedInUser como un objeto vacío
+  loggedInUser: any = {};
 
   constructor(private userService: UserService, private router: Router) {}
 
   async ngOnInit() {
     const userData = await this.userService.getUserData();
-    this.loggedInUser = userData; // Asigna los datos del usuario a loggedInUser
+    this.loggedInUser = userData;
   }
 
   cambiarPass() {
