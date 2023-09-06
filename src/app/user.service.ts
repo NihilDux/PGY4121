@@ -28,12 +28,8 @@ export class UserService {
     this.storage.set('userData', userData);
   }
 
-  async getUserData() { //Por acá la posible solucion del HTML HOME con el usuario
-    if (this.isLoggedIn()) {
-      const userData = await this.storage.get('userData');
-      return userData;
-    }
-    return null;
+ getUserData() { //Por acá la posible solucion del HTML HOME con el usuario
+    return this.storage.get('userData');
   }
 
   isLoggedIn() {
@@ -46,7 +42,7 @@ export class UserService {
     this.storage.remove('userData');
   }
 
-  cambioPass(nuevaContrasena: string) {
+  cambioPass(nuevaContrasena: string) { //No funciona, aún
     if (this.isLoggedIn()) {
       this.storage.get('userData').then((userData) => {
         if (userData) {
