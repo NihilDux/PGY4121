@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { AnimationController } from '@ionic/angular';
+import { AuthService } from '../auth.service'; // Importa el nuevo servicio
 
 @Component({
   selector: 'app-login',
@@ -17,12 +17,13 @@ export class LoginPage implements OnInit {
     Password: '',
   };
 
+  storageReady: boolean = false;
 
   constructor(
-    private userService: UserService,
     private router: Router,
     public toastController: ToastController,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
+    private authService: AuthService // Inyecta el nuevo servicio
   ) {}
 
   ngOnInit() {}
@@ -30,26 +31,33 @@ export class LoginPage implements OnInit {
   async ingresar() {
     const validationMessage = this.validateModel(this.login);
     if (validationMessage === 'success') {
-      const userData = { Usuario: this.login.Usuario };
-      this.userService.saveUserData(userData);
-      this.presentToast('Bienvenido');
-      await this.playLoginAnimation();
-      this.router.navigate(['/home']);
+      const user = this.login.Usuario;
+      const password = this.login.Password;
+      const foundUser = this.authService.loginUser(user, password); // Utiliza el método de autenticación
+
+      if (foundUser) {
+        const userData = { Usuario: user };
+        this.presentToast('Bienvenido');
+        await this.playLoginAnimation();
+        this.router.navigate(['/home']);
+      } else {
+        this.presentToast('Credenciales inválidas');
+      }
+
     } else {
       this.presentToast('Error: ' + validationMessage);
     }
   }
-  
+
   validateModel(model: any): string {
     if (model.Usuario.length < 3 || model.Usuario.length > 8) {
-      return 'El usuario debe tener al menos 3 caracteres y un maximo de 8';
+      return 'El usuario debe tener al menos 3 caracteres y un máximo de 8';
     }
-    if (model.Password.length < 4 || model.Password.length > 4) {
-      return 'La contraseña debe tener 4 caracteres';
+    if (model.Password.length !== 4) {
+      return 'La contraseña debe tener exactamente 4 caracteres';
     }
     return 'success';
   }
-  
 
   async presentToast(message: string, duration?: number) {
     const toast = await this.toastController.create({
@@ -72,4 +80,9 @@ export class LoginPage implements OnInit {
 
     await animation.play();
   }
+
+  async registro() {
+    this.router.navigate(['/registro']);
+  }
+
 }

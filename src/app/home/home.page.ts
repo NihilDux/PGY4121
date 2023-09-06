@@ -1,33 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  loggedInUser: any = {}; // Inicializa loggedInUser como un objeto vacío
 
-  userData: any = {
-    Nombre: '',
-    Apellido: '',
-    NivelEducacion: '',
-    FechaNacimiento: '',
-  };
+  constructor(private userService: UserService, private router: Router) {}
 
-  constructor(
-    private userService: UserService
-  ) {}
-  
-  isLoggedIn() {
-    const userData = this.userService.getUserData();
-    return userData && userData.Usuario !== '';
+  async ngOnInit() {
+    const userData = await this.userService.getUserData();
+    this.loggedInUser = userData; // Asigna los datos del usuario a loggedInUser
   }
 
-  get loggedInUserName() {
-    const userData = this.userService.getUserData();
-    return userData.Usuario;
+  cambiarPass() {
+    this.router.navigate(['/cambiopass']);
   }
-
-
 }

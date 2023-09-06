@@ -1,18 +1,18 @@
 <ion-header>
   <ion-toolbar>
     <ion-title class="ion-text-center">
-      <h1 #titulo>Bienvenido</h1>
+      <h1>Bienvenido</h1>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <br>
 <ion-content class="ion-text-center">
-  <div class="welcome-message" *ngIf="isLoggedIn()">
-    <h2>Usuario: {{ loggedInUserName }}</h2>
+  <div class="welcome-message" *ngIf="loggedInUser && loggedInUser.Usuario">
+    <h2>Usuario: {{ loggedInUser.Usuario }}</h2>
   </div>
   <br>
   <ion-card>
-   
+    <!-- Otras secciones de la página de inicio -->
   </ion-card>
 </ion-content>
 
