@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,26 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  userData: any = {
+    Nombre: '',
+    Apellido: '',
+    NivelEducacion: '',
+    FechaNacimiento: '',
+  };
+
+  constructor(
+    private userService: UserService
+  ) {}
+  
+  isLoggedIn() {
+    const userData = this.userService.getUserData();
+    return userData && userData.Usuario !== '';
+  }
+
+  get loggedInUserName() {
+    const userData = this.userService.getUserData();
+    return userData.Usuario;
+  }
+
 
 }
