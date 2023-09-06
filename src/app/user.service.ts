@@ -28,7 +28,7 @@ export class UserService {
     this.storage.set('userData', userData);
   }
 
-  async getUserData() {
+  async getUserData() { //Por acá la posible solucion del HTML HOME con el usuario
     if (this.isLoggedIn()) {
       const userData = await this.storage.get('userData');
       return userData;
