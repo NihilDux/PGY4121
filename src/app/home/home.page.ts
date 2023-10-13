@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,16 +8,24 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  loggedInUser: any = {};
+  User: any = {};
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,) {}
 
   async ngOnInit() {
     const userData = await this.userService.getUserData();
-    this.loggedInUser = userData;
+    this.User = userData;
   }
 
   cambiarPass() {
     this.router.navigate(['/cambiopass']);
+  }
+
+  logout(){
+    this.userService.logout();
+    this.router.navigate(['/login']);
+    window.location.reload();
   }
 }

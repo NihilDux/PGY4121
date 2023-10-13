@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { AnimationController } from '@ionic/angular';
-import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -18,27 +17,26 @@ export class LoginPage implements OnInit {
     Password: '',
   };
 
-  storageReady: boolean = false;
 
   constructor(
     private router: Router,
     public toastController: ToastController,
     private animationCtrl: AnimationController,
-    private authService: AuthService,
     private userService: UserService, 
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.router.navigate(['/login']);
+  }
 
   async ingresar() {
     const validationMessage = this.validateModel(this.login);
     if (validationMessage === 'success') {
       const user = this.login.Usuario;
       const password = this.login.Password;
-      const foundUser = this.authService.loginUser(user, password);
+      const foundUser = this.userService.loginUser(user, password);
 
       if (foundUser) {
-        const userData = { Usuario: user };
         this.presentToast('Bienvenido');
         await this.playLoginAnimation();
         this.userService.isLoggedIn();
@@ -87,5 +85,6 @@ export class LoginPage implements OnInit {
   async registro() {
     this.router.navigate(['/registro']);
   }
+
 
 }

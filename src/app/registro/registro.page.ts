@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
-import { CommunicationService } from '../communication.service';//Sin usar aún
+import { UserService } from '../services/user.service';
 import { ToastController } from '@ionic/angular';
 
 
@@ -20,7 +18,6 @@ export class RegistroPage implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService,
     private userService: UserService,
     public toastController: ToastController,
   ) {}
@@ -29,16 +26,18 @@ export class RegistroPage implements OnInit {
 
   registrarUsuario() {
     if (this.contrasena !== this.confirmacionContrasena) {
+      //Agregar Feedback del error
       return;
     }
 
     const usuarioExistente = this.userService.getUserByUsername(this.usuario);
     if (usuarioExistente) {
+      //Agregar Feedback del error
       return;
     }
 
     const userData = { Usuario: this.usuario };
-    this.userService.saveUserData(userData);
+    this.userService.saveUserData(userData); //Help
 
     const nuevoUsuario = {
       id: this.userService.generateUniqueId(),
@@ -49,7 +48,7 @@ export class RegistroPage implements OnInit {
     };
 
     this.userService.agregarUsuario(nuevoUsuario);
-    if (this.authService.loginUser(this.usuario, this.contrasena)) {
+    if (this.userService.loginUser(this.usuario, this.contrasena)) {
       this.registroExitoso = true;
       this.router.navigate(['/home']);
     }

@@ -7,12 +7,14 @@
 </ion-header>
 <br>
 <ion-content class="ion-text-center">
-  <div class="welcome-message" *ngIf="loggedInUser && loggedInUser.Usuario">
-    <h2>Usuario: {{ loggedInUser.Usuario }}</h2> <!-- Sigue el problema de que muestra al último usuario en registrarce -->
+  <div class="welcome-message" *ngIf="User && User.Usuario">
+    <h2>Usuario: {{ User.Usuario }}</h2> <!-- Sigue el problema de que muestra al último usuario en registrarce -->
   </div>
   <br>
   <ion-card>
     <ion-button expand="full" (click)="cambiarPass()">Cambiar Contraseña</ion-button>
+    <ion-button expand="full" (click)="logout()">Cerrar Session</ion-button>
+    
   </ion-card>
 </ion-content>
 

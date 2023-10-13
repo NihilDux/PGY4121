@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './auth.guard'; //Sin usar aún
-
+import { AuthGuard } from './guard/auth.guard';
 const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    canActivate: [AuthGuard],
 
   },
   {
@@ -21,12 +21,21 @@ const routes: Routes = [
   {
     path: 'cambiopass',
     loadChildren: () => import('./cambiopass/cambiopass.module').then( m => m.CambiopassPageModule),
+    canActivate: [AuthGuard],
 
   },
   {
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },
+  {
+    path: 'not-found',
+    loadChildren: () => import('./not-found/not-found.module').then( m => m.NotFoundPageModule)
+  },
+  { 
+    path: '**', redirectTo: 'not-found' 
+  },
+
 ];
 
 @NgModule({

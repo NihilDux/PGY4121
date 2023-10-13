@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from './models/user.models';
+import { User } from '../models/user.models';
 import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
@@ -28,8 +28,21 @@ export class UserService {
     this.storage.set('userData', userData);
   }
 
- getUserData() { //Por acá la posible solucion del HTML HOME con el usuario
+ getUserData() { 
+  //Por acá la posible solucion del HTML HOME con el usuario
     return this.storage.get('userData');
+  }
+
+  loginUser(username: string, password: string) {
+    const user = this.getUserByUsername(username);
+
+    if (user && user.password === password) {
+      this.loggedIn = true;
+      return true;
+    } else {
+      this.loggedIn = false;
+      return false;
+    }
   }
 
   isLoggedIn() {
@@ -39,7 +52,6 @@ export class UserService {
   logout() {
     this.loggedIn = false;
     this.storage.set('loggedIn', false);
-    this.storage.remove('userData');
   }
 
   cambioPass(nuevaContrasena: string) { //No funciona, aún
